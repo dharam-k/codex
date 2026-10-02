@@ -5,6 +5,7 @@ const path = require("node:path");
 const host = process.env.HOST || "127.0.0.1";
 const port = Number(process.env.PORT || 3000);
 const publicDir = path.join(__dirname, "public");
+let openRouterModelsCache = { expiresAt: 0, models: [] };
 
 const contentTypes = {
   ".css": "text/css; charset=utf-8",
@@ -100,6 +101,38 @@ async function callOpenRouter(model, messages, system) {
   return data.choices?.[0]?.message?.content || "";
 }
 
+async function handleOpenRouterModels(res) {
+  try {
+    if (openRouterModelsCache.expiresAt > Date.now()) {
+      json(res, 200, { models: openRouterModelsCache.models });
+      return;
+    }
+
+    const response = await fetch("https://openrouter.ai/api/v1/models");
+    const data = await response.json();
+    if (!response.ok) throw new Error("Could not load OpenRouter models.");
+
+    const freeModels = (data.data || [])
+      .filter((model) => {
+        const promptPrice = Number(model.pricing?.prompt);
+        const completionPrice = Number(model.pricing?.completion);
+        return model.id?.endsWith(":free") || (promptPrice === 0 && completionPrice === 0);
+      })
+      .map((model) => ({ id: model.id, name: model.name || model.id }))
+      .filter((model) => model.id && model.id !== "openrouter/free")
+      .sort((a, b) => a.name.localeCompare(b.name));
+
+    const models = [
+      { id: "openrouter/free", name: "Free models — automatic selection" },
+      ...freeModels
+    ];
+    openRouterModelsCache = { expiresAt: Date.now() + 10 * 60 * 1000, models };
+    json(res, 200, { models });
+  } catch (error) {
+    json(res, 502, { error: error.message || "Could not load OpenRouter models." });
+  }
+}
+
 async function handleChat(req, res) {
   try {
     const body = await readJson(req);
@@ -152,6 +185,7 @@ async function serveStatic(req, res) {
 
 const server = http.createServer(async (req, res) => {
   if (req.method === "POST" && req.url === "/api/chat") return handleChat(req, res);
+  if (req.method === "GET" && req.url === "/api/openrouter/models") return handleOpenRouterModels(res);
   if (req.method === "GET") return serveStatic(req, res);
   res.writeHead(405, { Allow: "GET, POST" }).end("Method not allowed");
 });

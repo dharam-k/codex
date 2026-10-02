@@ -25,13 +25,44 @@ const sendButton = document.querySelector("#send");
 const newChatButton = document.querySelector("#new-chat");
 let messages = [];
 
-function fillModels() {
-  modelSelect.replaceChildren(...models[providerSelect.value].map(([value, label]) => {
+function modelOptions(items) {
+  return items.map(([value, label]) => {
     const option = document.createElement("option");
     option.value = value;
     option.textContent = label;
     return option;
-  }));
+  });
+}
+
+async function fillModels() {
+  const provider = providerSelect.value;
+  if (provider !== "openrouter") {
+    modelSelect.replaceChildren(...modelOptions(models[provider]));
+    return;
+  }
+
+  const fallbackFreeModels = [["openrouter/free", "Free models — automatic selection"]];
+  const renderOpenRouterModels = (freeModels) => {
+    const freeGroup = document.createElement("optgroup");
+    freeGroup.label = "Free models";
+    freeGroup.append(...modelOptions(freeModels));
+
+    const popularGroup = document.createElement("optgroup");
+    popularGroup.label = "Popular models";
+    popularGroup.append(...modelOptions(models.openrouter));
+    modelSelect.replaceChildren(freeGroup, popularGroup);
+  };
+
+  renderOpenRouterModels(fallbackFreeModels);
+  try {
+    const response = await fetch("/api/openrouter/models");
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error);
+    if (providerSelect.value !== "openrouter") return;
+    renderOpenRouterModels(data.models.map((model) => [model.id, model.name]));
+  } catch (error) {
+    console.warn("Using the fallback OpenRouter model list:", error.message);
+  }
 }
 
 function addMessage(role, content, pending = false) {
