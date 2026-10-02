@@ -113,14 +113,15 @@ button { -webkit-tap-highlight-color: transparent; }
 .primary-button:hover { border-color: var(--accent-dark); background: var(--accent-dark); }
 .icon-button { border: 1px solid var(--line); color: var(--ink-soft); background: white; }
 .icon-button:hover { border-color: var(--line-strong); color: var(--ink); }
-.settings-toggle { display: none; }
+.settings-toggle,
+.history-toggle { display: none; }
 
 .workspace {
   min-width: 0;
   min-height: 0;
   flex: 1 1 auto;
   display: grid;
-  grid-template-columns: clamp(280px, 23vw, 340px) minmax(0, 1fr);
+  grid-template-columns: clamp(260px, 21vw, 320px) minmax(0, 1fr) clamp(240px, 19vw, 286px);
   position: relative;
 }
 
@@ -186,6 +187,44 @@ textarea:focus { border-color: #75a18a; box-shadow: 0 0 0 3px rgba(40, 92, 72, 0
   background: rgba(255, 255, 255, 0.72);
 }
 
+.history-panel {
+  min-width: 0;
+  min-height: 0;
+  padding: 26px 16px 18px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-left: 1px solid var(--line);
+  background: rgba(249, 250, 248, 0.88);
+}
+
+.history-heading { padding: 0 6px 17px; display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.history-heading .eyebrow { margin-bottom: 5px; }
+.history-heading h2 { margin: 0; font: 500 1.35rem/1.2 Georgia, serif; letter-spacing: -0.025em; }
+.history-count { min-width: 27px; height: 27px; padding: 0 7px; display: grid; place-items: center; border-radius: 9px; color: var(--accent); background: var(--accent-soft); font-size: 0.7rem; font-weight: 800; }
+.history-list { min-height: 0; display: flex; flex: 1; flex-direction: column; gap: 7px; overflow-y: auto; scrollbar-width: thin; }
+.history-empty { margin: 20px 10px; color: var(--muted); font-size: 0.8rem; line-height: 1.5; text-align: center; }
+
+.history-item {
+  min-width: 0;
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  transition: border-color 150ms ease, background 150ms ease;
+}
+
+.history-item:hover { border-color: var(--line); background: white; }
+.history-item.is-active { border-color: #cdded3; background: var(--accent-soft); }
+.history-open { min-width: 0; padding: 9px 8px; display: grid; flex: 1; gap: 4px; border: 0; color: inherit; background: transparent; text-align: left; }
+.history-open strong { overflow: hidden; font-size: 0.78rem; font-weight: 710; text-overflow: ellipsis; white-space: nowrap; }
+.history-open span { overflow: hidden; color: var(--muted); font-size: 0.65rem; text-overflow: ellipsis; white-space: nowrap; }
+.history-delete { width: 29px; height: 29px; flex: 0 0 auto; border: 0; border-radius: 8px; color: #929a95; background: transparent; font-size: 1.1rem; }
+.history-delete:hover { color: #9b3d3d; background: #f8e9e9; }
+.history-footnote { margin: 14px 6px 0; color: #909993; font-size: 0.63rem; text-align: center; }
+
 .messages {
   min-width: 0;
   min-height: 0;
@@ -198,6 +237,7 @@ textarea:focus { border-color: #75a18a; box-shadow: 0 0 0 3px rgba(40, 92, 72, 0
 }
 
 .welcome { max-width: 670px; min-height: 100%; margin: auto; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.welcome[hidden] { display: none; }
 .welcome-orb { width: 56px; height: 56px; display: grid; place-items: center; border-radius: 18px; color: white; background: linear-gradient(145deg, #3b8064, var(--accent-dark)); box-shadow: 0 14px 32px rgba(40, 92, 72, 0.22); }
 .welcome-kicker { margin: 20px 0 7px !important; color: var(--accent) !important; font-size: 0.7rem; font-weight: 800; letter-spacing: 0.13em; text-transform: uppercase; }
 .welcome h2 { margin: 0 0 10px; font: 500 clamp(2rem, 4.5vw, 3.1rem)/1.05 Georgia, serif; letter-spacing: -0.045em; }
@@ -207,11 +247,17 @@ textarea:focus { border-color: #75a18a; box-shadow: 0 0 0 3px rgba(40, 92, 72, 0
 .suggestions button { min-width: 0; padding: 15px; border: 1px solid var(--line); border-radius: 13px; color: var(--ink-soft); background: rgba(255, 255, 255, 0.82); text-align: left; font-size: 0.8rem; line-height: 1.4; transition: transform 150ms ease, border-color 150ms ease, box-shadow 150ms ease; }
 .suggestions button:hover { border-color: #adc0b5; background: white; box-shadow: 0 8px 24px rgba(53, 65, 57, 0.08); transform: translateY(-2px); }
 
-.message { width: min(760px, 100%); margin: 0 auto 26px; display: grid; grid-template-columns: 36px minmax(0, 1fr); gap: 13px; }
+.conversation { width: 100%; }
+.message { width: min(820px, 100%); margin: 0 auto 25px; display: flex; align-items: flex-end; gap: 11px; }
+.message.user { flex-direction: row-reverse; }
 .message-avatar { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 11px; font-size: 0.7rem; font-weight: 800; background: var(--warm); }
 .message.assistant .message-avatar { color: white; background: var(--accent); }
-.message-body { min-width: 0; padding-top: 3px; color: var(--ink-soft); line-height: 1.67; white-space: pre-wrap; overflow-wrap: anywhere; }
+.message-content { min-width: 0; max-width: min(76%, 660px); }
+.message-body { min-width: 0; padding: 12px 15px; border: 1px solid var(--line); border-radius: 5px 17px 17px 17px; color: var(--ink-soft); background: var(--surface); line-height: 1.58; white-space: pre-wrap; overflow-wrap: anywhere; box-shadow: 0 5px 16px rgba(40, 52, 44, 0.05); }
+.message.user .message-body { border-color: var(--accent); border-radius: 17px 5px 17px 17px; color: white; background: var(--accent); box-shadow: 0 7px 20px rgba(39, 93, 71, 0.15); }
 .message-role { margin-bottom: 5px; color: var(--muted); font-size: 0.7rem; font-weight: 800; }
+.message.user .message-role { text-align: right; }
+.message.error .message-body { border-color: #eccaca; color: #8a3333; background: #fff5f5; }
 .message.pending .message-body::after { content: ""; width: 6px; height: 6px; margin-left: 6px; display: inline-block; border-radius: 50%; background: var(--accent); animation: pulse 1s infinite alternate; }
 @keyframes pulse { to { opacity: 0.2; transform: translateY(-2px); } }
 
@@ -240,7 +286,29 @@ textarea:focus { border-color: #75a18a; box-shadow: 0 0 0 3px rgba(40, 92, 72, 0
 .composer > button:hover { background: var(--accent-dark); transform: translateY(-1px); }
 .composer > button:disabled { opacity: 0.45; cursor: wait; transform: none; }
 .composer p { margin: 7px 8px 0; color: #8a938e; font-size: 0.67rem; text-align: center; }
-.settings-backdrop { display: none; }
+.settings-backdrop,
+.history-backdrop { display: none; }
+
+@media (max-width: 1150px) {
+  .workspace { grid-template-columns: clamp(270px, 28vw, 320px) minmax(0, 1fr); }
+  .history-toggle { display: inline-flex; }
+  .history-panel {
+    width: min(340px, calc(100vw - 44px));
+    height: 100%;
+    position: absolute;
+    inset: 0 0 0 auto;
+    z-index: 30;
+    border-left: 1px solid var(--line);
+    background: #f9faf8;
+    box-shadow: -18px 0 50px rgba(23, 32, 28, 0.16);
+    transform: translateX(105%);
+    transition: transform 220ms ease;
+  }
+
+  .history-panel.is-open { transform: translateX(0); }
+  .history-backdrop { position: absolute; inset: 0; z-index: 20; width: 100%; height: 100%; display: block; border: 0; background: rgba(19, 28, 23, 0.34); backdrop-filter: blur(2px); }
+  .history-backdrop[hidden] { display: none; }
+}
 
 @media (max-width: 800px) {
   .shell { width: 100vw; height: 100dvh; margin: 0; border: 0; border-radius: 0; box-shadow: none; }
@@ -286,8 +354,9 @@ textarea:focus { border-color: #75a18a; box-shadow: 0 0 0 3px rgba(40, 92, 72, 0
   .welcome h2 { font-size: clamp(1.85rem, 10vw, 2.45rem); }
   .welcome > p { max-width: 290px; font-size: 0.88rem; }
   .suggestions { margin-top: 24px; }
-  .message { grid-template-columns: 31px minmax(0, 1fr); gap: 10px; margin-bottom: 22px; }
+  .message { gap: 9px; margin-bottom: 22px; }
   .message-avatar { width: 30px; height: 30px; border-radius: 9px; font-size: 0.62rem; }
+  .message-content { max-width: calc(100% - 40px); }
   .message-body { font-size: 0.92rem; }
   .composer p { display: none; }
   .composer textarea { min-height: 54px; padding-top: 15px; padding-bottom: 15px; }

@@ -1,8 +1,8 @@
 {
-  "name": "llm-chat",
+  "name": "modeldeck",
   "version": "1.0.0",
   "private": true,
-  "description": "A lightweight chat interface for OpenAI and Anthropic models.",
+  "description": "A multi-model AI chat workspace with local conversation history.",
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js"

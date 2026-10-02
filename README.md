@@ -1,6 +1,6 @@
-# LLM Chat
+# ModelDeck
 
-A small, dependency-free web app for chatting with OpenAI, Anthropic, and OpenRouter models. API keys stay on the server.
+A small, dependency-free web app for chatting with OpenAI, Anthropic, and OpenRouter models. API keys stay on the server, while conversation history is stored locally in the browser.
 
 ## Run it
 

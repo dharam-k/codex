@@ -91,7 +91,7 @@ async function callOpenRouter(model, messages, system) {
       Authorization: `Bearer ${apiKey}`,
       "Content-Type": "application/json",
       "HTTP-Referer": process.env.APP_URL || `http://${host}:${port}`,
-      "X-Title": "LLM Chat"
+      "X-Title": "ModelDeck"
     },
     body: JSON.stringify({ model, messages: input })
   });
@@ -191,5 +191,5 @@ const server = http.createServer(async (req, res) => {
 });
 
 server.listen(port, host, () => {
-  console.log(`LLM Chat is running at http://${host}:${port}`);
+  console.log(`ModelDeck is running at http://${host}:${port}`);
 });

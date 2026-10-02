@@ -5,16 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#f2f4ef" />
     <meta name="description" content="Chat with OpenAI, Anthropic, and OpenRouter models from one simple interface." />
-    <title>LLM Chat</title>
+    <title>ModelDeck — Multi-model AI chat</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
     <main class="shell">
       <header class="topbar">
-        <a class="brand" href="/" aria-label="LLM Chat home">
+        <a class="brand" href="/" aria-label="ModelDeck home">
           <span class="brand-mark" aria-hidden="true">✦</span>
           <span class="brand-copy">
-            <strong>LLM Chat</strong>
+            <strong>ModelDeck</strong>
             <small>One chat, every model</small>
           </span>
         </a>
@@ -22,6 +22,10 @@
           <button id="settings-toggle" class="icon-button settings-toggle" type="button" aria-controls="settings" aria-expanded="false">
             <span aria-hidden="true">☰</span>
             <span class="button-label">Models</span>
+          </button>
+          <button id="history-toggle" class="icon-button history-toggle" type="button" aria-controls="history" aria-expanded="false">
+            <span aria-hidden="true">◷</span>
+            <span class="button-label">History</span>
           </button>
           <button id="new-chat" class="primary-button" type="button">
             <span aria-hidden="true">＋</span>
@@ -66,7 +70,7 @@
 
         <section class="chat-panel" aria-label="Conversation">
           <div id="messages" class="messages" aria-live="polite">
-            <div class="welcome">
+            <div id="welcome" class="welcome">
               <div class="welcome-orb" aria-hidden="true">✦</div>
               <p class="welcome-kicker">Your AI workspace</p>
               <h2>Where should we begin?</h2>
@@ -77,6 +81,7 @@
                 <button type="button">Review a piece of code</button>
               </div>
             </div>
+            <div id="conversation" class="conversation"></div>
           </div>
 
           <form id="chat-form" class="composer">
@@ -85,6 +90,19 @@
             <p>Enter to send · Shift + Enter for a new line</p>
           </form>
         </section>
+
+        <aside id="history" class="history-panel" aria-label="Chat history">
+          <div class="history-heading">
+            <div>
+              <p class="eyebrow">Conversations</p>
+              <h2>Chat history</h2>
+            </div>
+            <span id="history-count" class="history-count">0</span>
+          </div>
+          <div id="history-list" class="history-list"></div>
+          <p class="history-footnote">Saved privately on this device</p>
+        </aside>
+        <button id="history-backdrop" class="history-backdrop" type="button" aria-label="Close chat history" hidden></button>
       </section>
     </main>
     <script src="/app.js" defer></script>
