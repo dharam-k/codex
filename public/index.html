@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f2f4ef" />
     <meta name="description" content="Chat with OpenAI, Anthropic, and OpenRouter models from one simple interface." />
     <title>LLM Chat</title>
     <link rel="stylesheet" href="/styles.css" />
@@ -11,18 +12,30 @@
     <main class="shell">
       <header class="topbar">
         <a class="brand" href="/" aria-label="LLM Chat home">
-          <span class="brand-mark">L</span>
-          <span>LLM Chat</span>
+          <span class="brand-mark" aria-hidden="true">✦</span>
+          <span class="brand-copy">
+            <strong>LLM Chat</strong>
+            <small>One chat, every model</small>
+          </span>
         </a>
-        <button id="new-chat" class="ghost-button" type="button">New chat</button>
+        <div class="topbar-actions">
+          <button id="settings-toggle" class="icon-button settings-toggle" type="button" aria-controls="settings" aria-expanded="false">
+            <span aria-hidden="true">☰</span>
+            <span class="button-label">Models</span>
+          </button>
+          <button id="new-chat" class="primary-button" type="button">
+            <span aria-hidden="true">＋</span>
+            <span>New chat</span>
+          </button>
+        </div>
       </header>
 
       <section class="workspace">
-        <aside class="settings" aria-label="Chat settings">
-          <div>
+        <aside id="settings" class="settings" aria-label="Chat settings">
+          <div class="settings-heading">
             <p class="eyebrow">Model setup</p>
-            <h1>One place to talk with your favorite models.</h1>
-            <p class="subtle">Choose a provider, select a model, and start a conversation.</p>
+            <h1>Choose how your assistant thinks.</h1>
+            <p class="subtle">Switch providers and models at any point in the conversation.</p>
           </div>
 
           <label>
@@ -44,15 +57,20 @@
             <textarea id="system" rows="5">You are a helpful, concise assistant.</textarea>
           </label>
 
-          <p class="key-note">API keys are read by the server and never sent to the browser.</p>
+          <div class="privacy-note">
+            <span aria-hidden="true">✓</span>
+            <p>API keys stay securely on your server.</p>
+          </div>
         </aside>
+        <button id="settings-backdrop" class="settings-backdrop" type="button" aria-label="Close model settings" hidden></button>
 
         <section class="chat-panel" aria-label="Conversation">
           <div id="messages" class="messages" aria-live="polite">
             <div class="welcome">
-              <div class="welcome-orb">✦</div>
-              <h2>What can I help you explore?</h2>
-              <p>Ask a question, draft something, or work through an idea.</p>
+              <div class="welcome-orb" aria-hidden="true">✦</div>
+              <p class="welcome-kicker">Your AI workspace</p>
+              <h2>Where should we begin?</h2>
+              <p>Ask a question, shape an idea, or solve something together.</p>
               <div class="suggestions">
                 <button type="button">Explain a tricky concept simply</button>
                 <button type="button">Help me brainstorm a product idea</button>

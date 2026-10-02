@@ -23,7 +23,29 @@ const form = document.querySelector("#chat-form");
 const promptInput = document.querySelector("#prompt");
 const sendButton = document.querySelector("#send");
 const newChatButton = document.querySelector("#new-chat");
+const settingsPanel = document.querySelector("#settings");
+const settingsToggle = document.querySelector("#settings-toggle");
+const settingsBackdrop = document.querySelector("#settings-backdrop");
+const mobileLayout = window.matchMedia("(max-width: 800px)");
 let messages = [];
+
+function setSettingsOpen(open) {
+  const shouldOpen = mobileLayout.matches && open;
+  settingsPanel.classList.toggle("is-open", shouldOpen);
+  settingsToggle.setAttribute("aria-expanded", String(shouldOpen));
+  settingsBackdrop.hidden = !shouldOpen;
+  settingsPanel.inert = mobileLayout.matches && !shouldOpen;
+}
+
+function syncSettingsLayout() {
+  if (mobileLayout.matches) setSettingsOpen(false);
+  else {
+    settingsPanel.classList.remove("is-open");
+    settingsPanel.inert = false;
+    settingsBackdrop.hidden = true;
+    settingsToggle.setAttribute("aria-expanded", "false");
+  }
+}
 
 function modelOptions(items) {
   return items.map(([value, label]) => {
@@ -121,6 +143,12 @@ async function sendMessage(text) {
 }
 
 providerSelect.addEventListener("change", fillModels);
+settingsToggle.addEventListener("click", () => setSettingsOpen(!settingsPanel.classList.contains("is-open")));
+settingsBackdrop.addEventListener("click", () => setSettingsOpen(false));
+mobileLayout.addEventListener("change", syncSettingsLayout);
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") setSettingsOpen(false);
+});
 form.addEventListener("submit", (event) => {
   event.preventDefault();
   const text = promptInput.value.trim();
@@ -154,4 +182,5 @@ newChatButton.addEventListener("click", () => {
   window.location.reload();
 });
 
+syncSettingsLayout();
 fillModels();
