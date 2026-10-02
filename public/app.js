@@ -7,6 +7,11 @@ const models = {
   anthropic: [
     ["claude-sonnet-4-20250514", "Claude Sonnet 4"],
     ["claude-3-5-haiku-latest", "Claude 3.5 Haiku"]
+  ],
+  openrouter: [
+    ["openai/gpt-4.1-mini", "GPT-4.1 mini"],
+    ["anthropic/claude-sonnet-4", "Claude Sonnet 4"],
+    ["google/gemini-2.5-flash", "Gemini 2.5 Flash"]
   ]
 };
 

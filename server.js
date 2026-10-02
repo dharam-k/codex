@@ -79,6 +79,27 @@ async function callAnthropic(model, messages, system) {
   return (data.content || []).filter((part) => part.type === "text").map((part) => part.text).join("\n");
 }
 
+async function callOpenRouter(model, messages, system) {
+  const apiKey = process.env.OPENROUTER_API_KEY;
+  if (!apiKey) throw new Error("OPENROUTER_API_KEY is not configured on the server.");
+
+  const input = system ? [{ role: "system", content: system }, ...messages] : messages;
+  const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      "Content-Type": "application/json",
+      "HTTP-Referer": process.env.APP_URL || `http://${host}:${port}`,
+      "X-Title": "LLM Chat"
+    },
+    body: JSON.stringify({ model, messages: input })
+  });
+
+  const data = await response.json();
+  if (!response.ok) throw new Error(data.error?.message || "OpenRouter request failed.");
+  return data.choices?.[0]?.message?.content || "";
+}
+
 async function handleChat(req, res) {
   try {
     const body = await readJson(req);
@@ -88,11 +109,14 @@ async function handleChat(req, res) {
     const messages = validateMessages(body.messages);
 
     if (!model) throw new Error("A model is required.");
-    if (!['openai', 'anthropic'].includes(provider)) throw new Error("Unknown provider.");
+    const providers = {
+      openai: callOpenAI,
+      anthropic: callAnthropic,
+      openrouter: callOpenRouter
+    };
+    if (!providers[provider]) throw new Error("Unknown provider.");
 
-    const content = provider === "openai"
-      ? await callOpenAI(model, messages, system)
-      : await callAnthropic(model, messages, system);
+    const content = await providers[provider](model, messages, system);
 
     json(res, 200, { content });
   } catch (error) {
