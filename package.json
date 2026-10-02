@@ -1,0 +1,13 @@
+{
+  "name": "llm-chat",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A lightweight chat interface for OpenAI and Anthropic models.",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

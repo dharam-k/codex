@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Chat with OpenAI and Anthropic models from one simple interface." />
+    <title>LLM Chat</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="LLM Chat home">
+          <span class="brand-mark">L</span>
+          <span>LLM Chat</span>
+        </a>
+        <button id="new-chat" class="ghost-button" type="button">New chat</button>
+      </header>
+
+      <section class="workspace">
+        <aside class="settings" aria-label="Chat settings">
+          <div>
+            <p class="eyebrow">Model setup</p>
+            <h1>One place to talk with your favorite models.</h1>
+            <p class="subtle">Choose a provider, select a model, and start a conversation.</p>
+          </div>
+
+          <label>
+            <span>Provider</span>
+            <select id="provider">
+              <option value="openai">OpenAI</option>
+              <option value="anthropic">Anthropic</option>
+            </select>
+          </label>
+
+          <label>
+            <span>Model</span>
+            <select id="model"></select>
+          </label>
+
+          <label>
+            <span>System prompt</span>
+            <textarea id="system" rows="5">You are a helpful, concise assistant.</textarea>
+          </label>
+
+          <p class="key-note">API keys are read by the server and never sent to the browser.</p>
+        </aside>
+
+        <section class="chat-panel" aria-label="Conversation">
+          <div id="messages" class="messages" aria-live="polite">
+            <div class="welcome">
+              <div class="welcome-orb">✦</div>
+              <h2>What can I help you explore?</h2>
+              <p>Ask a question, draft something, or work through an idea.</p>
+              <div class="suggestions">
+                <button type="button">Explain a tricky concept simply</button>
+                <button type="button">Help me brainstorm a product idea</button>
+                <button type="button">Review a piece of code</button>
+              </div>
+            </div>
+          </div>
+
+          <form id="chat-form" class="composer">
+            <textarea id="prompt" rows="1" placeholder="Message your model…" aria-label="Message" required></textarea>
+            <button id="send" type="submit" aria-label="Send message">↑</button>
+            <p>Enter to send · Shift + Enter for a new line</p>
+          </form>
+        </section>
+      </section>
+    </main>
+    <script src="/app.js" defer></script>
+  </body>
+</html>
